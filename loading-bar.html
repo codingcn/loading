@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>顶部加载进度条</title>
+  <style>
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      /*如果需要遮罩层*/
+      /*background-color: #ffffff;*/
+      z-index: 10000;
+    }
+    /*进度条样式*/
+    .loading .loading-bar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background-color: #009a61;
+      -webkit-animation: loading-start 0.4s;
+      animation: loading-start 0.4s;
+    }
+    /*预先完成一部分进度动画*/
+    @-webkit-keyframes loading-start {
+      from {
+        width: 0
+      }
+      to {
+        width: 30%
+      }
+    }
+    @keyframes loading-start {
+      from {
+        width: 0
+      }
+      to {
+        width: 30%
+      }
+    }
+  </style>
+</head>
+<body>
+<!--网页加载进度条start-->
+<div id="loading" class="loading">
+  <div id="loading-bar" class="loading-bar">
+  </div>
+</div>
+<!--网页加载进度条end-->
+
+
+<img src="http://199461.com/demo/js/loading/demo.gif" alt="">
+
+
+<script>
+  var loading = document.getElementById("loading");
+  var loading_bar = document.getElementById("loading-bar");
+  //进度条增加宽度
+  var loading_bar_width = loading_bar.offsetWidth;
+  document.onreadystatechange = function () {
+    if (document.readyState === "interactive") {
+      //加载速度慢的情况
+      var start_timer = setInterval(function () {
+        if (loading_bar.offsetWidth < loading_bar.parentNode.offsetWidth * 0.8) {
+          loading_bar_width += 0.01;
+          loading_bar.style.width = loading_bar.offsetWidth + loading_bar_width + "px";
+        }else{
+          clearInterval(start_timer);
+        }
+      }, 26);
+    } else if (document.readyState === "complete") {
+      //加载速度快的情况
+      var end_timer = setInterval(function () {
+        loading_bar_width += 0.1;
+        loading_bar.style.width = loading_bar.offsetWidth + loading_bar_width + "px";
+        if (loading_bar.offsetWidth >= loading_bar.parentNode.offsetWidth) {
+          clearInterval(end_timer);
+          loading.style.display = "none";
+        }
+      }, 1);
+    }
+  }
+</script>
+</body>
+</html>
